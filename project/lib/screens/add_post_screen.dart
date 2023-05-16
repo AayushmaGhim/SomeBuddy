@@ -30,6 +30,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       _isLoading = true;
     });
     try {
+      if(_descriptionController.text.isNotEmpty && _file != null){
       String res = await FirestoreMethods().uploadPost(
         _descriptionController.text,
         _file!,
@@ -49,6 +50,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
           _isLoading = false;
         });
         showSnackBar(res, context);
+      }
+      } 
+      else{
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar('Please enter all the fields', context);
       }
     } catch (e) {
       showSnackBar(e.toString(), context);
