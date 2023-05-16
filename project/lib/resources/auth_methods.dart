@@ -6,10 +6,18 @@ import 'package:project/resources/storage_methods.dart';
 import 'dart:typed_data';
 import 'package:project/models/user.dart' as model;
 
-
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<model.User> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot snap =
+        await _firestore.collection('users').doc(currentUser.uid).get();
+
+    return model.User.fromSnap(snap);
+  }
 
   // sign up user
   Future<String> signUpUser({
@@ -38,17 +46,19 @@ class AuthMethods {
         //add user to our databse
 
         model.User user = model.User(
-          username : username,
-          uid : cred.user!.uid,
-          email : email,
-          bio : bio,
-          photoUrl : photoUrl,
-          followers : [],
-          following : [],
+          username: username,
+          uid: cred.user!.uid,
+          email: email,
+          bio: bio,
+          photoUrl: photoUrl,
+          followers: [],
+          following: [],
         );
 
-        await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson(),);
- 
+        await _firestore.collection('users').doc(cred.user!.uid).set(
+              user.toJson(),
+            );
+
         //
         // await _firestore.collection('users').add({
         //   'username': username,
@@ -64,8 +74,7 @@ class AuthMethods {
     } on FirebaseAuthException catch (err) {
       if (err.code == 'invalid-email') {
         res = 'The email is badly formatted.';
-      }
-      else if (err.code == 'weak-password') {
+      } else if (err.code == 'weak-password') {
         res = 'Password should be at least 6 characters.';
       }
     } catch (err) {
@@ -74,30 +83,26 @@ class AuthMethods {
     return res;
   }
 
-  Future<String> loginUser({
-    required String email,
-    required String password
-  }) async{
+  Future<String> loginUser(
+      {required String email, required String password}) async {
     String res = "Some error occured";
-    
-    try{
-      if(email.isNotEmpty || password.isNotEmpty){
-        await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
         res = "success";
-      } else{
+      } else {
         res = "Please enter all the fields";
       }
-    } on FirebaseAuthException catch(e){
-      if(e.code == 'user-not-found'){
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
         res = "User not found";
-      }
-      else if(e.code == 'wrong-password'){
+      } else if (e.code == 'wrong-password') {
         res = "Incorrect password";
       }
-    }
-    
-    catch(err){
-        res = err.toString();
+    } catch (err) {
+      res = err.toString();
     }
     return res;
   }
