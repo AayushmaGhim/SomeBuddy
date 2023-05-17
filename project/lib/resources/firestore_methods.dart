@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project/models/post.dart';
 import 'package:project/resources/storage_methods.dart';
+import 'package:project/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
@@ -44,20 +45,52 @@ class FirestoreMethods {
     return res;
   }
 
-  Future<void> likePost(String postId, String uid, List likes) async{
-    try{
-      if(likes.contains(uid)){
+  Future<void> likePost(String postId, String uid, List likes) async {
+    try {
+      if (likes.contains(uid)) {
         await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayRemove([uid]),
         });
-      }
-      else{
+      } else {
         await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayUnion([uid]),
         });
-    } 
-    }catch(e){
-      print(e.toString(),);
+      }
+    } catch (e) {
+      print(
+        e.toString(),
+      );
+    }
   }
-}
+
+  Future<void> postComment(String postId, String text, String uid, String name, String profilePic) async {
+    try{
+        if(text.isNotEmpty){
+          String commentId = const Uuid().v1();
+         await _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).set({
+            'profilePic': profilePic,
+            'name': name,
+            'uid': uid,
+            'text': text,
+            'commentId': commentId,
+            'datePublished': DateTime.now(),
+          });
+        } else{
+          print('Comment is empty');
+        }
+    } catch(e){
+      print(e.toString());
+    }
+  }
+
+  //delete post
+  Future<void> deletePost(String postId) async{
+    try{
+      await _firestore.collection('posts').doc(postId).delete();
+
+    }
+    catch(e){
+      print(e.toString());
+    }
+  }
 }
