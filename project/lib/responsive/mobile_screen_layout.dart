@@ -73,7 +73,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           ),
            BottomNavigationBarItem(
              icon: Icon(
-              Icons.notifications,
+              Icons.message,
               color: _page == 3 ? selectedIconColor: primaryColor,
             ),
             label: '',

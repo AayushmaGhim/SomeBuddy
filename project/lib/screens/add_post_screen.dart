@@ -126,11 +126,29 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
     return _file == null
         ? Center(
-            child: IconButton(
-              onPressed: () => _selectImage(context),
-              icon: const Icon(Icons.upload),
-            ),
-          )
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+                  children: 
+                    [
+                      IconButton(
+                      onPressed: () => _selectImage(context),
+                      icon: const Icon(Icons.upload),
+                      iconSize: 64,
+                    ),
+                    const Text(
+                      'Upload Post',
+                      style: TextStyle(
+                        color: selectedIconColor,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              
+            ) 
+          
         : Scaffold(
             appBar: AppBar(
               backgroundColor: mobileBackgroundColor,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../utils/colors.dart';
+
 class CommentCard extends StatefulWidget {
   final snap;
   const CommentCard({Key? key, required this.snap}) : super(key: key);
@@ -40,11 +42,13 @@ class _CommentCardState extends State<CommentCard> {
                         TextSpan(
                           text: widget.snap['name'],
                           style: const TextStyle(
+                            color: primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
                           text: ' ${widget.snap['text']}',
+                          style: const TextStyle(color: primaryColor),
                         ),
                       ],
                     ),

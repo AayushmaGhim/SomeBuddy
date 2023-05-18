@@ -5,6 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:project/resources/storage_methods.dart';
 import 'dart:typed_data';
 import 'package:project/models/user.dart' as model;
+//import 'package:provider/provider.dart';
+
+//import '../providers/user_provider.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,10 +16,10 @@ class AuthMethods {
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
 
-    DocumentSnapshot snap =
+    DocumentSnapshot documentSnapshot =
         await _firestore.collection('users').doc(currentUser.uid).get();
 
-    return model.User.fromSnap(snap);
+    return model.User.fromSnap(documentSnapshot);
   }
 
   // sign up user
@@ -38,14 +41,14 @@ class AuthMethods {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
-        print(cred.user!.uid);
+       // print(cred.user!.uid);
 
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePics', file, false);
 
         //add user to our databse
 
-        model.User user = model.User(
+        model.User _user = model.User(
           username: username,
           uid: cred.user!.uid,
           email: email,
@@ -56,7 +59,7 @@ class AuthMethods {
         );
 
         await _firestore.collection('users').doc(cred.user!.uid).set(
-              user.toJson(),
+              _user.toJson(),
             );
 
         //
@@ -108,7 +111,9 @@ class AuthMethods {
   }
 
   Future<void> signOut() async{
-    await FirebaseAuth.instance.signOut();
-    void destroy;
+    await _auth.signOut();
+    
   }
+
+  
 }
