@@ -1,11 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
-class WebScreenLayout extends StatelessWidget {
+import '../utils/colors.dart';
+
+class WebScreenLayout extends StatefulWidget {
   const WebScreenLayout({Key? key}) : super(key: key);
-  
+
+  @override
+  State<WebScreenLayout> createState() => _WebScreenLayoutState();
+}
+
+class _WebScreenLayoutState extends State<WebScreenLayout> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: mobileBackgroundColor,
+        centerTitle: false,
+        title: SvgPicture.asset(
+          'assets/ic_instagram.svg',
+          color: primaryColor,
+          height: 32,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.messenger,
+              color: primaryColor,
+            ),
+          ),
+        ],
+      ),
       body: Center(
         child: Text("This is web")
       ),

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:project/resources/auth_methods.dart';
 import 'package:project/responsive/web_screen_layout.dart';
 import 'package:project/screens/signup_screen.dart';
+import 'package:project/utils/global_variables.dart';
 import 'package:project/utils/utils.dart';
 import 'package:project/widgets/text_field_input.dart';
 import '../responsive/mobile_screen_layout.dart';
@@ -60,11 +61,16 @@ class _LoginScreenState extends State<LoginScreen> {
     ));
   }
 
+  @override
   Widget build(BuildContext context) {
+    setState(() {
+      
+    });
     return Scaffold(
       body: SafeArea(
           child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 32),
+        padding: MediaQuery.of(context).size.width > webScreenSize ?  EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 3)
+        : const EdgeInsets.symmetric(horizontal: 32),
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

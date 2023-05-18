@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 import 'package:project/resources/storage_methods.dart';
 import 'dart:typed_data';
 import 'package:project/models/user.dart' as model;
@@ -105,5 +105,10 @@ class AuthMethods {
       res = err.toString();
     }
     return res;
+  }
+
+  Future<void> signOut() async{
+    await FirebaseAuth.instance.signOut();
+    void destroy;
   }
 }
