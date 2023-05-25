@@ -9,6 +9,7 @@ class User {
   final String bio;
   final List followers;
   final List following;
+  final String sentiment;
 
   const User({
     required this.email,
@@ -18,6 +19,7 @@ class User {
     required this.bio,
     required this.followers,
     required this.following,
+    required this.sentiment,
   });
 
 
@@ -32,6 +34,7 @@ class User {
       bio: snapshot['bio'],
       followers: snapshot['followers'],
       following: snapshot['following'],
+      sentiment: snapshot['sentiment'],
     );
   }
 
@@ -43,5 +46,19 @@ class User {
     "bio": bio,
     "followers": followers,
     "following": followers,
+    "sentiment": sentiment,
   };
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      username: map['username'] ?? '',
+      uid: map['uid'] ?? '',
+      email: map['email'] ?? '',
+      photoUrl: map['photo'],
+      bio: map['bio'],
+      followers: map['followers'],
+      following: map['following'],
+      sentiment: map['sentiment'],
+    );
+  }
 }

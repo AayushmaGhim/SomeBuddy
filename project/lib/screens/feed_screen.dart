@@ -14,7 +14,7 @@ class FeedScreen extends StatelessWidget {
         backgroundColor: mobileBackgroundColor,
         centerTitle: false,
         title: SvgPicture.asset(
-          'assets/ic_instagram.svg',
+          'assets/SomeBuddy.svg',
           color: primaryColor,
           height: 32,
         ),

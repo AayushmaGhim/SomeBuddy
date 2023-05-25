@@ -30,6 +30,8 @@ class _EditProfileState extends State<EditProfile> {
   Uint8List? _image;
   var userData = {};
   bool _isLoading = false;
+  
+  String? get uid => widget.uid;
 
   @override
   void initState() {
@@ -62,7 +64,11 @@ class _EditProfileState extends State<EditProfile> {
       //     .doc(widget.uid)
       //     .get();
 
-      var userSnap = await FirebaseFirestore.instance.collection('users').doc(widget.uid).get();
+      User currentUser = _auth.currentUser!;
+      var userSnap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
 
       userData = userSnap.data()!;
       setState(() {});
@@ -74,14 +80,14 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  editUser() async {
+  editUser() {
     setState(() {
       _isLoading = true;
     });
 
     try {
       if (_image != null) {
-        String photoUrl = await StorageMethods()
+        Future<String> photoUrl = StorageMethods()
             .uploadImageToStorage('profilePics', _image!, false);
 
         //   > userData = {
@@ -102,19 +108,28 @@ class _EditProfileState extends State<EditProfile> {
         });
       }
       if (_usernameController.text.isNotEmpty) {
-        
-        
+        //String? username;
+        _firestore
+            .collection('users')
+            .doc(uid)
+            .update({'username': _usernameController.text});
+        //userData.update('username', (value) => _usernameController.text);
         setState(() {
-          userData['username'] = _usernameController.text;
           _isLoading = false;
         });
+        return showSnackBar('Updated Successfully', context);
       }
       if (_bioController.text.isNotEmpty) {
-        
+        String? bio;
+        _firestore
+            .collection('users')
+            .doc(uid)
+            .update({'bio': _bioController.text});
         setState(() {
-          userData['bio'] = _bioController.text;
+          //userData['bio'] = _bioController.text;
           _isLoading = false;
         });
+        return showSnackBar('Updated Successfully', context);
       }
       if (_image == null &&
           _bioController.text.isEmpty &&
@@ -215,18 +230,8 @@ class _EditProfileState extends State<EditProfile> {
               const SizedBox(height: 24),
 
               InkWell(
-                onTap: editUser(),
+                onTap: editUser,
                 child: Container(
-                  child: _isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: secondaryColor,
-                          ),
-                        )
-                      : const Text(
-                          'Make Changes',
-                          style: TextStyle(color: secondaryColor),
-                        ),
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -237,6 +242,16 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                       color: blueColor),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: secondaryColor,
+                          ),
+                        )
+                      : const Text(
+                          'Make Changes',
+                          style: TextStyle(color: secondaryColor),
+                        ),
                 ),
               ),
               const SizedBox(

@@ -6,8 +6,12 @@ import 'package:project/resources/storage_methods.dart';
 //import 'package:project/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
+
+
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    
 
   // upload posts
   Future<String> uploadPost(

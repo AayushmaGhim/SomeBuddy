@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Flexible(child: Container(), flex: 2),
 
             //svg image
-            SvgPicture.asset('assets/ic_instagram.svg',
+            Image.asset('assets/images/SomeBuddy.jpeg',
                 color: primaryColor, height: 64),
             const SizedBox(height: 64),
 

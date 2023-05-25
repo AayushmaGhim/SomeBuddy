@@ -35,11 +35,13 @@ dependencies:
   firebase_storage: ^11.1.2
   flutter:
     sdk: flutter
+  flutter_riverpod: ^2.3.6
   flutter_staggered_grid_view: ^0.6.2
   flutter_svg: ^2.0.5
   image_picker: ^0.8.7+5
   intl: ^0.18.1
   provider: ^6.0.5
+  shared_preferences: ^2.1.1
   staggered_grid_view_flutter: ^0.0.4
   uuid: ^3.0.7
 
@@ -59,6 +61,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/ic_instagram.svg
+    - assets/SomeBuddy.svg
+    - assets/images/SomeBuddy.png
+    - assets/images/SomeBuddy.jpeg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

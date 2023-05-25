@@ -1,9 +1,10 @@
 //import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:project/models/user.dart';
+import 'package:project/models/user.dart' as model;
 import 'package:project/screens/comments_screen.dart';
 import 'package:project/utils/colors.dart';
 import 'package:project/utils/utils.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
 import '../resources/firestore_methods.dart';
+import '../screens/profile_screen.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -44,7 +46,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<UserProvider>(context).getUser;
+    final model.User user = Provider.of<UserProvider>(context).getUser;
     return Container(
       color: mobileBackgroundColor,
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -58,10 +60,19 @@ class _PostCardState extends State<PostCard> {
             child: Row(
               children: [
                 // Header Section
-                CircleAvatar(
-                  radius: 16,
-                  backgroundImage:
-                      NetworkImage(widget.snap['profImage'].toString()),
+                InkWell(
+                  onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                              uid: widget.snap['uid'],
+                            ),
+                          ),
+                        ),
+                  child: CircleAvatar(
+                    radius: 16,
+                    backgroundImage:
+                        NetworkImage(widget.snap['profImage'].toString()),
+                  ),
                 ),
                 Expanded(
                   child: Padding(
@@ -98,9 +109,13 @@ class _PostCardState extends State<PostCard> {
                                     .map(
                                       (e) => InkWell(
                                         onTap: () async{
-                                          FirestoreMethods().deletePost(widget.snap['postId']);
-                                          Navigator.of(context).pop();
-                                          showSnackBar('Post Deleted', context);
+                                          if (widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+  FirestoreMethods().deletePost(widget.snap['postId']);
+  Navigator.of(context).pop();
+  showSnackBar('Post Deleted', context);
+} else{
+  showSnackBar("Cannot delete others' posts", context);
+}
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
