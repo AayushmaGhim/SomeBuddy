@@ -3,37 +3,39 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:project/models/message.dart';
+import 'package:project/anonymous/an_chat_contact.dart';
+import 'package:project/anonymous/an_message.dart';
+//import 'package:project/models/message.dart';
 //import 'package:project/utils/utils.dart';
 import 'package:project/models/user.dart' as model;
 //import 'package:project/utils/utils.dart';
 import 'package:uuid/uuid.dart';
-import '../../models/chat_contact.dart';
-import '../../providers/message_enum.dart';
+//import '../../models/chat_contact.dart';
+//import '../../providers/message_enum.dart';
 
-final chatRepositoryProvider = Provider(
-  (ref) => ChatRepository(
+final anChatRepositoryProvider = Provider(
+  (ref) => AnChatRepository(
     firestore: FirebaseFirestore.instance,
     auth: FirebaseAuth.instance,
   ),
 );
 
-class ChatRepository {
+class AnChatRepository {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  ChatRepository({required FirebaseFirestore firestore, required FirebaseAuth auth});
+  AnChatRepository({required FirebaseFirestore firestore, required FirebaseAuth auth});
 
-  Stream<List<ChatContact>> getChatContacts() {
+  Stream<List<AnChatContact>> getChatContacts() {
     return firestore
         .collection('users')
         .doc(auth.currentUser!.uid)
-        .collection('chats')
+        .collection('anChats')
         .snapshots()
         .asyncMap((event) async {
-      List<ChatContact> contacts = [];
+      List<AnChatContact> contacts = [];
       for (var document in event.docs) {
-        var chatContact = ChatContact.fromMap(document.data());
+        var chatContact = AnChatContact.fromMap(document.data());
         var userData = await firestore
             .collection('users')
             .doc(chatContact.contactId)
@@ -41,8 +43,8 @@ class ChatRepository {
         var user = model.User.fromMap(userData.data()!);
 
         contacts.add(
-          ChatContact(
-            name: user.username,
+          AnChatContact(
+            name: 'anonymous',
             profilePic: user.photoUrl,
             contactId: chatContact.contactId,
             timeSent: chatContact.timeSent,
@@ -56,19 +58,19 @@ class ChatRepository {
 
   
 
-  Stream<List<Message>> getChatStream(String recieverUserId) {
+  Stream<List<AnMessage>> getChatStream(String recieverUserId) {
     return firestore
         .collection('users')
         .doc(auth.currentUser!.uid)
-        .collection('chats')
+        .collection('anChats')
         .doc(recieverUserId)
         .collection('messages')
         .orderBy('timeSent')
         .snapshots()
         .map((event) {
-      List<Message> messages = [];
+      List<AnMessage> messages = [];
       for (var document in event.docs) {
-        messages.add(Message.fromMap(document.data()));
+        messages.add(AnMessage.fromMap(document.data()));
       }
       return messages;
     });
@@ -92,8 +94,8 @@ class ChatRepository {
           .collection('users')
           .doc(recieverUserId)
           .get();
-      var recieverChatContact = ChatContact(
-        name: senderSnap['username'],
+      var recieverChatContact = AnChatContact(
+        name: 'anonymous',
         profilePic: senderSnap['photoUrl'],
         contactId: senderSnap['uid'],
         timeSent: timeSent,
@@ -108,7 +110,7 @@ class ChatRepository {
             recieverChatContact.toJson(),
           );
       // users -> current user id  => chats -> reciever user id -> set data
-      var senderChatContact = ChatContact(
+      var senderChatContact = AnChatContact(
         name: recieverSnap['username'],
         profilePic: recieverSnap['photoUrl'],
         contactId: recieverSnap['uid'],
@@ -133,20 +135,20 @@ class ChatRepository {
     required String recieverUserId,
     required String text,
     required DateTime timeSent,
-    required messageType,
+    //required messageType,
     required String messageId,
     //required username,
     required recieverUserName,
     required senderUsername,
   }) async {
     try {
-      final message = Message(
-        type: messageType,
+      final message = AnMessage(
+        //type: messageType,
         senderId: auth.currentUser!.uid,
         recieverId: recieverUserId,
         text: text,
         timeSent: timeSent,
-        messageId: messageId,
+        AnMessageId: messageId,
         isSeen: false,
       );
 
@@ -157,7 +159,7 @@ class ChatRepository {
       await firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
-          .collection('chats')
+          .collection('anChats')
           .doc(recieverUserId)
           .collection('messages')
           .doc(messageId)
@@ -168,7 +170,7 @@ class ChatRepository {
       await firestore
           .collection('users')
           .doc(recieverUserId)
-          .collection('chats')
+          .collection('anChats')
           .doc(auth.currentUser!.uid)
           .collection('messages')
           .doc(messageId)
@@ -219,7 +221,7 @@ class ChatRepository {
           recieverUserId: recieverUserId,
           text: text,
           timeSent: timeSent,
-          messageType: MessageEnum.text,
+          //messageType: MessageEnum.text,
           messageId: messageId,
           //username: senderSnap['username'],
           recieverUserName: recieverSnap['username'],

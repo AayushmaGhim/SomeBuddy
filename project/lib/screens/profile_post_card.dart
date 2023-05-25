@@ -15,35 +15,31 @@ import '../providers/user_provider.dart';
 import '../resources/firestore_methods.dart';
 import '../screens/profile_screen.dart';
 
-class PostCard extends StatefulWidget {
+class ProfilePostCard extends StatefulWidget {
   final snap;
-  const PostCard({Key? key, required this.snap}) : super(key: key);
+  const ProfilePostCard({Key? key, required this.snap}) : super(key: key);
 
   @override
-  State<PostCard> createState() => _PostCardState();
+  State<ProfilePostCard> createState() => _ProfilePostCardState();
 }
 
-class _PostCardState extends State<PostCard> {
+class _ProfilePostCardState extends State<ProfilePostCard> {
   bool isLikeAnimating = false;
   int commentLen = 0;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     getComments();
   }
 
-  void getComments() async {
+  void getComments() async{
     try {
-      QuerySnapshot snap = await FirebaseFirestore.instance
-          .collection('posts')
-          .doc(widget.snap['postId'])
-          .collection('comments')
-          .get();
-
+      QuerySnapshot snap = await FirebaseFirestore.instance.collection('posts').doc(widget.snap['postId']).collection('comments').get();
+  
       commentLen = snap.docs.length;
     } catch (e) {
-      showSnackBar(e.toString(), context);
+        showSnackBar(e.toString(), context);
     }
     setState(() {});
   }
@@ -66,12 +62,12 @@ class _PostCardState extends State<PostCard> {
                 // Header Section
                 InkWell(
                   onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ProfileScreen(
-                        uid: widget.snap['uid'],
-                      ),
-                    ),
-                  ),
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                              uid: widget.snap['uid'],
+                            ),
+                          ),
+                        ),
                   child: CircleAvatar(
                     radius: 16,
                     backgroundImage:
@@ -112,20 +108,14 @@ class _PostCardState extends State<PostCard> {
                                 ]
                                     .map(
                                       (e) => InkWell(
-                                        onTap: () async {
-                                          if (widget.snap['uid'] ==
-                                              FirebaseAuth
-                                                  .instance.currentUser!.uid) {
-                                            FirestoreMethods().deletePost(
-                                                widget.snap['postId']);
-                                            Navigator.of(context).pop();
-                                            showSnackBar(
-                                                'Post Deleted', context);
-                                          } else {
-                                            showSnackBar(
-                                                "Cannot delete others' posts",
-                                                context);
-                                          }
+                                        onTap: () async{
+                                          if (widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid) {
+  FirestoreMethods().deletePost(widget.snap['postId']);
+  Navigator.of(context).pop();
+  showSnackBar('Post Deleted', context);
+} else{
+  showSnackBar("Cannot delete others' posts", context);
+}
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
@@ -219,7 +209,23 @@ class _PostCardState extends State<PostCard> {
                   Icons.comment_outlined,
                 ),
               ),
-              
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.send,
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.bookmark_border,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
 

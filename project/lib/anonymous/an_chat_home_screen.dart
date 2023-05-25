@@ -1,20 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project/anonymous/an_chat_screen.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 // import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:project/chat/screen/chat_screen.dart';
+import 'package:project/models/user.dart' as model;
+import 'package:provider/provider.dart';
 
+import '../providers/user_provider.dart';
 import '../utils/colors.dart';
 
-class ChatHomeScreen extends StatefulWidget {
-  const ChatHomeScreen({super.key});
+class AnChatHomeScreen extends StatefulWidget {
+  const AnChatHomeScreen({super.key});
 
   @override
-  State<ChatHomeScreen> createState() => _ChatHomeScreenState();
+  State<AnChatHomeScreen> createState() => _AnChatHomeScreenState();
 }
 
-class _ChatHomeScreenState extends State<ChatHomeScreen> {
+class _AnChatHomeScreenState extends State<AnChatHomeScreen> {
   
   bool isShowUsers = false;
   //DocumentSnapshot snap = FirebaseFirestore.instance.collection('users').doc().get();
@@ -26,21 +30,27 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
   void dispose() {
     super.dispose();
   }
+  
+
+
+      // var userDataMap =
+      //     await firestore.collection('users').doc(recieverUserId).get()
 
   @override
   Widget build(BuildContext context) {
+    final model.User user = Provider.of<UserProvider>(context).getUser;
     
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
         foregroundColor: primaryColor,
-        title: Text('Anonymously text other users'),
+        title: const Text('Anonymously text other users'),
         centerTitle: false,
       ),
 
       body:  FutureBuilder(
               future: FirebaseFirestore.instance
-                  .collection('users').where('sentiment' == ['sentiment'])
+                  .collection('users').where('sentiment' , isEqualTo : user.sentiment)
                   .get(),
               builder: (context, snapshot) {
                  if (!snapshot.hasData) {
@@ -56,7 +66,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                       return InkWell(
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => MobileChatScreen(
+                            builder: (context) => AnMobileChatScreen(
                               name: (snapshot.data! as dynamic).docs[index]
                                     ['username'], uid: (snapshot.data! as dynamic).docs[index]
                                     ['uid']
@@ -66,11 +76,9 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                         child: ListTile(
                           leading: CircleAvatar(
                             backgroundImage: NetworkImage(
-                                (snapshot.data! as dynamic).docs[index]
-                                    ['photoUrl']),
-                          ),
+                          'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/626fd8140423801.6241b91e24d9c.png',)),
                           title: Text(
-                            (snapshot.data! as dynamic).docs[index]['username'],
+                            'Anonymous',
                           ),
                         ),
                       );
