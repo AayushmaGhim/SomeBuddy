@@ -78,9 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
             Flexible(child: Container(), flex: 2),
 
             //svg image
-            Image.asset('assets/images/SomeBuddy.jpeg',
-                color: primaryColor, height: 64),
-            const SizedBox(height: 64),
+            Image.asset('assets/images/SomeBuddy.png',
+                 height: 300),
 
             // text input email
             TextFieldInput(

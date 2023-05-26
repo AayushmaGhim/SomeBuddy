@@ -87,6 +87,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             label: '',
             backgroundColor: primaryColor,
           ),
+          BottomNavigationBarItem(
+             icon: Icon(
+              Icons.lock,
+              color: _page == 5 ? selectedIconColor: primaryColor,
+            ),
+            label: '',
+            backgroundColor: primaryColor,
+          ),
         ],
         onTap: navigationTapped,
       ),

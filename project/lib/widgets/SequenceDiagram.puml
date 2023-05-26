@@ -1,0 +1,657 @@
+@startuml
+set namespaceSeparator ::
+
+class "project::anonymous::an_bottom_chat_field.dart::AnBottomChatField" {
+  +String recieverUserId
+  +State<AnBottomChatField> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::anonymous::an_bottom_chat_field.dart::AnBottomChatField"
+
+class "project::anonymous::an_bottom_chat_field.dart::_AnBottomChatFieldState" {
+  +bool isShowSendButton
+  -TextEditingController _messageController
+  +void dispose()
+  +Widget build()
+}
+
+"project::anonymous::an_bottom_chat_field.dart::_AnBottomChatFieldState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "project::anonymous::an_bottom_chat_field.dart::_AnBottomChatFieldState"
+
+class "project::anonymous::an_chat_contact.dart::AnChatContact" {
+  +String name
+  +String profilePic
+  +String contactId
+  +DateTime timeSent
+  +String lastMessage
+  +Map<String, dynamic> toMap()
+  {static} +AnChatContact fromSnap()
+  +Map<String, dynamic> toJson()
+}
+
+class "project::anonymous::an_chat_controller.dart::AnChatController" {
+  +AnChatRepository anChatRepository
+  +ProviderRef<dynamic> ref
+  +Stream<List<AnChatContact>> anChatContacts()
+  +Stream<List<AnMessage>> anChatStream()
+  +void setChatMessageSeen()
+}
+
+"project::anonymous::an_chat_controller.dart::AnChatController" o-- "project::anonymous::an_chat_repository.dart::AnChatRepository"
+"project::anonymous::an_chat_controller.dart::AnChatController" o-- "riverpod::src::provider.dart::ProviderRef<dynamic>"
+
+class "project::anonymous::an_chat_home_screen.dart::AnChatHomeScreen" {
+  +State<AnChatHomeScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::anonymous::an_chat_home_screen.dart::AnChatHomeScreen"
+
+class "project::anonymous::an_chat_home_screen.dart::_AnChatHomeScreenState" {
+  +bool isShowUsers
+  +void dispose()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project::anonymous::an_chat_home_screen.dart::_AnChatHomeScreenState"
+
+class "project::anonymous::an_chat_repository.dart::AnChatRepository" {
+  +FirebaseAuth auth
+  +FirebaseFirestore firestore
+  +Stream<List<AnChatContact>> getChatContacts()
+  +Stream<List<AnMessage>> getChatStream()
+  -void _saveDataToContactsSubcollection()
+  -void _saveMessageToMessageSubcollection()
+  +void sendTextMessage()
+  +void setChatMessageSeen()
+}
+
+"project::anonymous::an_chat_repository.dart::AnChatRepository" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"project::anonymous::an_chat_repository.dart::AnChatRepository" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+
+class "project::anonymous::an_chat_screen.dart::AnMobileChatScreen" {
+  +String name
+  +String uid
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::anonymous::an_chat_screen.dart::AnMobileChatScreen"
+
+class "project::anonymous::an_message.dart::AnMessage" {
+  +String senderId
+  +String recieverId
+  +String text
+  +DateTime timeSent
+  +String AnMessageId
+  +bool isSeen
+  +Map<String, dynamic> toMap()
+  {static} +AnMessage fromSnap()
+  +Map<String, dynamic> toJson()
+}
+
+class "project::chat::controller::chat_controller.dart::ChatController" {
+  +ChatRepository chatRepository
+  +ProviderRef<dynamic> ref
+  +Stream<List<ChatContact>> chatContacts()
+  +Stream<List<Message>> chatStream()
+  +void setChatMessageSeen()
+}
+
+"project::chat::controller::chat_controller.dart::ChatController" o-- "project::chat::repository::chat_repository.dart::ChatRepository"
+"project::chat::controller::chat_controller.dart::ChatController" o-- "riverpod::src::provider.dart::ProviderRef<dynamic>"
+
+class "project::chat::repository::chat_repository.dart::ChatRepository" {
+  +FirebaseAuth auth
+  +FirebaseFirestore firestore
+  +Stream<List<ChatContact>> getChatContacts()
+  +Stream<List<Message>> getChatStream()
+  -void _saveDataToContactsSubcollection()
+  -void _saveMessageToMessageSubcollection()
+  +void sendTextMessage()
+  +void setChatMessageSeen()
+}
+
+"project::chat::repository::chat_repository.dart::ChatRepository" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"project::chat::repository::chat_repository.dart::ChatRepository" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+
+class "project::chat::screen::chat_screen.dart::MobileChatScreen" {
+  +String name
+  +String uid
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::chat::screen::chat_screen.dart::MobileChatScreen"
+
+class "project::chat::widget::bottom_chat_field.dart::BottomChatField" {
+  +String recieverUserId
+  +State<BottomChatField> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::chat::widget::bottom_chat_field.dart::BottomChatField"
+
+class "project::chat::widget::bottom_chat_field.dart::_BottomChatFieldState" {
+  +bool isShowSendButton
+  -TextEditingController _messageController
+  +void dispose()
+  +Widget build()
+}
+
+"project::chat::widget::bottom_chat_field.dart::_BottomChatFieldState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "project::chat::widget::bottom_chat_field.dart::_BottomChatFieldState"
+
+class "project::main.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::main.dart::MyApp"
+
+class "project::models::chat_contact.dart::ChatContact" {
+  +String name
+  +String profilePic
+  +String contactId
+  +DateTime timeSent
+  +String lastMessage
+  +Map<String, dynamic> toMap()
+  {static} +ChatContact fromSnap()
+  +Map<String, dynamic> toJson()
+}
+
+class "project::models::message.dart::Message" {
+  +String senderId
+  +String recieverId
+  +String text
+  +MessageEnum type
+  +DateTime timeSent
+  +String messageId
+  +bool isSeen
+  +Map<String, dynamic> toMap()
+  {static} +Message fromSnap()
+  +Map<String, dynamic> toJson()
+}
+
+"project::models::message.dart::Message" o-- "project::providers::message_enum.dart::MessageEnum"
+
+class "project::models::post.dart::Post" {
+  +String description
+  +String uid
+  +String postId
+  +String username
+  +dynamic datePublished
+  +String postUrl
+  +String profImage
+  +dynamic likes
+  {static} +Post fromSnap()
+  +Map<String, dynamic> toJson()
+}
+
+class "project::models::user.dart::User" {
+  +String email
+  +String uid
+  +String photoUrl
+  +String username
+  +String bio
+  +List<dynamic> followers
+  +List<dynamic> following
+  +String sentiment
+  {static} +User fromSnap()
+  +Map<String, dynamic> toJson()
+}
+
+class "project::providers::message_enum.dart::MessageEnum" {
+  +int index
+  {static} +List<MessageEnum> values
+  {static} +MessageEnum text
+}
+
+"project::providers::message_enum.dart::MessageEnum" o-- "project::providers::message_enum.dart::MessageEnum"
+"dart::core::Enum" <|-- "project::providers::message_enum.dart::MessageEnum"
+
+class "project::providers::message_reply_provider.dart::MessageReply" {
+  +String message
+  +bool isMe
+  +MessageEnum messageEnum
+}
+
+"project::providers::message_reply_provider.dart::MessageReply" o-- "project::providers::message_enum.dart::MessageEnum"
+
+class "project::providers::user_provider.dart::UserProvider" {
+  -User? _user
+  -AuthMethods _authMethods
+  +User getUser
+  +Future<void> refreshUser()
+}
+
+"project::providers::user_provider.dart::UserProvider" o-- "project::models::user.dart::User"
+"project::providers::user_provider.dart::UserProvider" o-- "project::resources::auth_methods.dart::AuthMethods"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "project::providers::user_provider.dart::UserProvider"
+
+class "project::resources::auth_methods.dart::AuthRepository" {
+  +FirebaseAuth auth
+  +FirebaseFirestore firestore
+  +Future<User?> getCurrentUserData()
+  +Stream<User> userData()
+  +void setUserState()
+}
+
+"project::resources::auth_methods.dart::AuthRepository" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"project::resources::auth_methods.dart::AuthRepository" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+
+class "project::resources::auth_methods.dart::AuthMethods" {
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +Future<User> getUserDetails()
+  +Future<String> signUpUser()
+  +Future<String> loginUser()
+  +Future<void> signOut()
+}
+
+"project::resources::auth_methods.dart::AuthMethods" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"project::resources::auth_methods.dart::AuthMethods" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+
+class "project::resources::firestore_methods.dart::FirestoreMethods" {
+  -FirebaseFirestore _firestore
+  +Future<String> uploadPost()
+  +Future<void> likePost()
+  +Future<void> postComment()
+  +Future<void> deletePost()
+  +Future<void> followUser()
+}
+
+"project::resources::firestore_methods.dart::FirestoreMethods" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+
+class "project::resources::storage_methods.dart::StorageMethods" {
+  -FirebaseStorage _storage
+  -FirebaseAuth _auth
+  +Future<String> uploadImageToStorage()
+}
+
+"project::resources::storage_methods.dart::StorageMethods" o-- "firebase_storage::firebase_storage.dart::FirebaseStorage"
+"project::resources::storage_methods.dart::StorageMethods" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+
+class "project::responsive::mobile_screen_layout.dart::MobileScreenLayout" {
+  +State<MobileScreenLayout> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::responsive::mobile_screen_layout.dart::MobileScreenLayout"
+
+class "project::responsive::mobile_screen_layout.dart::_MobileScreenLayoutState" {
+  -int _page
+  +PageController pageController
+  +void initState()
+  +void dispose()
+  +void navigationTapped()
+  +void onPageChanged()
+  +Widget build()
+}
+
+"project::responsive::mobile_screen_layout.dart::_MobileScreenLayoutState" o-- "flutter::src::widgets::page_view.dart::PageController"
+"flutter::src::widgets::framework.dart::State" <|-- "project::responsive::mobile_screen_layout.dart::_MobileScreenLayoutState"
+
+class "project::responsive::responsive_layout_screen.dart::ResponsiveLayout" {
+  +Widget webScreenLayout
+  +Widget mobileScreenLayout
+  +State<ResponsiveLayout> createState()
+}
+
+"project::responsive::responsive_layout_screen.dart::ResponsiveLayout" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::responsive::responsive_layout_screen.dart::ResponsiveLayout"
+
+class "project::responsive::responsive_layout_screen.dart::_ResponsiveLayoutState" {
+  +void initState()
+  +dynamic addData()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project::responsive::responsive_layout_screen.dart::_ResponsiveLayoutState"
+
+class "project::responsive::web_screen_layout.dart::WebScreenLayout" {
+  +State<WebScreenLayout> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::responsive::web_screen_layout.dart::WebScreenLayout"
+
+class "project::responsive::web_screen_layout.dart::_WebScreenLayoutState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project::responsive::web_screen_layout.dart::_WebScreenLayoutState"
+
+class "project::screens::add_post_screen.dart::AddPostScreen" {
+  +_AddPostScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::add_post_screen.dart::AddPostScreen"
+
+class "project::screens::add_post_screen.dart::_AddPostScreenState" {
+  -Uint8List? _file
+  -TextEditingController _descriptionController
+  -bool _isLoading
+  +void postImage()
+  -dynamic _selectImage()
+  +void clearImage()
+  +void dispose()
+  +Widget build()
+}
+
+"project::screens::add_post_screen.dart::_AddPostScreenState" o-- "dart::typed_data::Uint8List"
+"project::screens::add_post_screen.dart::_AddPostScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::add_post_screen.dart::_AddPostScreenState"
+
+class "project::screens::chat_home_screen.dart::ChatHomeScreen" {
+  +State<ChatHomeScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::chat_home_screen.dart::ChatHomeScreen"
+
+class "project::screens::chat_home_screen.dart::_ChatHomeScreenState" {
+  +bool isShowUsers
+  +void dispose()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::chat_home_screen.dart::_ChatHomeScreenState"
+
+class "project::screens::comments_screen.dart::CommentScreen" {
+  +dynamic snap
+  +State<CommentScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::comments_screen.dart::CommentScreen"
+
+class "project::screens::comments_screen.dart::_CommentScreenState" {
+  -TextEditingController _commentController
+  +void dispose()
+  +Widget build()
+}
+
+"project::screens::comments_screen.dart::_CommentScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::comments_screen.dart::_CommentScreenState"
+
+class "project::screens::edit_profile_screen.dart::EditProfile" {
+  +String uid
+  +State<EditProfile> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::edit_profile_screen.dart::EditProfile"
+
+class "project::screens::edit_profile_screen.dart::_EditProfileState" {
+  -TextEditingController _bioController
+  -TextEditingController _usernameController
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  -Uint8List? _image
+  +Map<dynamic, dynamic> userData
+  -bool _isLoading
+  +String? uid
+  +void initState()
+  +void selectImage()
+  +void dispose()
+  +dynamic getData()
+  +dynamic editUser()
+  +Widget build()
+}
+
+"project::screens::edit_profile_screen.dart::_EditProfileState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"project::screens::edit_profile_screen.dart::_EditProfileState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"project::screens::edit_profile_screen.dart::_EditProfileState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"project::screens::edit_profile_screen.dart::_EditProfileState" o-- "dart::typed_data::Uint8List"
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::edit_profile_screen.dart::_EditProfileState"
+
+class "project::screens::feed_screen.dart::FeedScreen" {
+  +State<FeedScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::feed_screen.dart::FeedScreen"
+
+class "project::screens::feed_screen.dart::_FeedScreenState" {
+  +int postLen
+  +void initState()
+  +dynamic getData()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::feed_screen.dart::_FeedScreenState"
+
+class "project::screens::login_screen.dart::LoginScreen" {
+  +_LoginScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::login_screen.dart::LoginScreen"
+
+class "project::screens::login_screen.dart::_LoginScreenState" {
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  -bool _isLoading
+  +void dispose()
+  +void logInUser()
+  +void navigateToSignUp()
+  +Widget build()
+}
+
+"project::screens::login_screen.dart::_LoginScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::login_screen.dart::_LoginScreenState"
+
+class "project::screens::profile_post_card.dart::ProfilePostCard" {
+  +dynamic snap
+  +State<ProfilePostCard> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::profile_post_card.dart::ProfilePostCard"
+
+class "project::screens::profile_post_card.dart::_ProfilePostCardState" {
+  +bool isLikeAnimating
+  +int commentLen
+  +void initState()
+  +void getComments()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::profile_post_card.dart::_ProfilePostCardState"
+
+class "project::screens::profile_screen.dart::ProfileScreen" {
+  +String uid
+  +State<ProfileScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::profile_screen.dart::ProfileScreen"
+
+class "project::screens::profile_screen.dart::_ProfileScreenState" {
+  +Map<dynamic, dynamic> userData
+  +int postLen
+  +int followers
+  +int following
+  +bool isFollowing
+  +bool isLoading
+  +void initState()
+  +dynamic getData()
+  +Widget build()
+  +Column buildStatColumn()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::profile_screen.dart::_ProfileScreenState"
+
+class "project::screens::search_screen.dart::SearchScreen" {
+  +State<SearchScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::search_screen.dart::SearchScreen"
+
+class "project::screens::search_screen.dart::_SearchScreenState" {
+  +TextEditingController searchController
+  +bool isShowUsers
+  +void dispose()
+  +Widget build()
+}
+
+"project::screens::search_screen.dart::_SearchScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::search_screen.dart::_SearchScreenState"
+
+class "project::screens::signup_screen.dart::SignupScreen" {
+  +_SignupScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::screens::signup_screen.dart::SignupScreen"
+
+class "project::screens::signup_screen.dart::_SignupScreenState" {
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  -TextEditingController _bioController
+  -TextEditingController _usernameController
+  -Uint8List? _image
+  -bool _isLoading
+  +void selectImage()
+  +void signUpUser()
+  +void navigateToLogin()
+  +void dispose()
+  +Widget build()
+}
+
+"project::screens::signup_screen.dart::_SignupScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"project::screens::signup_screen.dart::_SignupScreenState" o-- "dart::typed_data::Uint8List"
+"flutter::src::widgets::framework.dart::State" <|-- "project::screens::signup_screen.dart::_SignupScreenState"
+
+class "project::widgets::chat_list.dart::ChatList" {
+  +String recieverUserId
+  +ConsumerState<ConsumerStatefulWidget> createState()
+}
+
+"flutter_riverpod::src::consumer.dart::ConsumerStatefulWidget" <|-- "project::widgets::chat_list.dart::ChatList"
+
+class "project::widgets::chat_list.dart::_ChatListState" {
+  +ScrollController messageController
+  +void dispose()
+  +Widget build()
+}
+
+"project::widgets::chat_list.dart::_ChatListState" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+"flutter_riverpod::src::consumer.dart::ConsumerState" <|-- "project::widgets::chat_list.dart::_ChatListState"
+
+class "project::widgets::comment_card.dart::CommentCard" {
+  +dynamic snap
+  +State<CommentCard> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::widgets::comment_card.dart::CommentCard"
+
+class "project::widgets::comment_card.dart::_CommentCardState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "project::widgets::comment_card.dart::_CommentCardState"
+
+class "project::widgets::custom_button.dart::CustomButton" {
+  +String text
+  +void Function() onPressed
+  +Widget build()
+}
+
+"project::widgets::custom_button.dart::CustomButton" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::widgets::custom_button.dart::CustomButton"
+
+class "project::widgets::error.dart::ErrorScreen" {
+  +String error
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::widgets::error.dart::ErrorScreen"
+
+class "project::widgets::follow_button.dart::FollowButton" {
+  +dynamic Function()? function
+  +Color backgroundColor
+  +Color borderColor
+  +Color textColor
+  +String text
+  +Widget build()
+}
+
+"project::widgets::follow_button.dart::FollowButton" o-- "null::dynamic Function()"
+"project::widgets::follow_button.dart::FollowButton" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::widgets::follow_button.dart::FollowButton"
+
+class "project::widgets::like_animation.dart::LikeAnimation" {
+  +Widget child
+  +bool isAnimating
+  +Duration duration
+  +void Function()? onEnd
+  +bool smallLike
+  +State<LikeAnimation> createState()
+}
+
+"project::widgets::like_animation.dart::LikeAnimation" o-- "flutter::src::widgets::framework.dart::Widget"
+"project::widgets::like_animation.dart::LikeAnimation" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::widgets::like_animation.dart::LikeAnimation"
+
+class "project::widgets::like_animation.dart::_LikeAnimationState" {
+  +AnimationController controller
+  +Animation<double> scale
+  +void initState()
+  +void didUpdateWidget()
+  +dynamic startAnimation()
+  +void dispose()
+  +Widget build()
+}
+
+"project::widgets::like_animation.dart::_LikeAnimationState" o-- "flutter::src::animation::animation_controller.dart::AnimationController"
+"project::widgets::like_animation.dart::_LikeAnimationState" o-- "flutter::src::animation::animation.dart::Animation<double>"
+"flutter::src::widgets::framework.dart::State" <|-- "project::widgets::like_animation.dart::_LikeAnimationState"
+"flutter::src::widgets::ticker_provider.dart::SingleTickerProviderStateMixin" <|-- "project::widgets::like_animation.dart::_LikeAnimationState"
+
+class "project::widgets::loader.dart::Loader" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::widgets::loader.dart::Loader"
+
+class "project::widgets::message_reply_preview.dart::MessageReplyPreview" {
+  +Widget build()
+}
+
+"flutter_riverpod::src::consumer.dart::ConsumerWidget" <|-- "project::widgets::message_reply_preview.dart::MessageReplyPreview"
+
+class "project::widgets::my_message_card.dart::MyMessageCard" {
+  +String message
+  +String date
+  +bool isSeen
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::widgets::my_message_card.dart::MyMessageCard"
+
+class "project::widgets::post_card.dart::PostCard" {
+  +dynamic snap
+  +State<PostCard> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "project::widgets::post_card.dart::PostCard"
+
+class "project::widgets::post_card.dart::_PostCardState" {
+  +bool isLikeAnimating
+  +int commentLen
+  +void initState()
+  +void getComments()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "prgoject::widgets::post_card.dart::_PostCardState"
+
+class "project::widgets::sender_message_card.dart::SenderMessageCard" {
+  +String message
+  +String date
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::widgets::sender_message_card.dart::SenderMessageCard"
+
+class "project::widgets::text_field_input.dart::TextFieldInput" {
+  +TextEditingController textEditingController
+  +bool isPass
+  +String hintText
+  +TextInputType textInputType
+  +Widget build()
+}
+
+"project::widgets::text_field_input.dart::TextFieldInput" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"project::widgets::text_field_input.dart::TextFieldInput" o-- "flutter::src::services::text_input.dart::TextInputType"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "project::widgets::text_field_input.dart::TextFieldInput"
+
+
+@enduml

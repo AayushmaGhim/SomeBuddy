@@ -210,7 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 FutureBuilder(
                   future: FirebaseFirestore.instance
                       .collection('posts')
-                      .where('uid', isEqualTo: widget.uid)
+                      .where('uid', isEqualTo: widget.uid).where('isPrivate', isEqualTo: false)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {

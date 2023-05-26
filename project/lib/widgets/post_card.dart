@@ -51,6 +51,7 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     final model.User user = Provider.of<UserProvider>(context).getUser;
+    if(widget.snap['isPrivate'] == false){
     return Container(
       color: mobileBackgroundColor,
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -97,51 +98,7 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => Dialog(
-                              child: ListView(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                shrinkWrap: true,
-                                children: [
-                                  'Delete',
-                                ]
-                                    .map(
-                                      (e) => InkWell(
-                                        onTap: () async {
-                                          if (widget.snap['uid'] ==
-                                              FirebaseAuth
-                                                  .instance.currentUser!.uid) {
-                                            FirestoreMethods().deletePost(
-                                                widget.snap['postId']);
-                                            Navigator.of(context).pop();
-                                            showSnackBar(
-                                                'Post Deleted', context);
-                                          } else {
-                                            showSnackBar(
-                                                "Cannot delete others' posts",
-                                                context);
-                                          }
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 12,
-                                            horizontal: 16,
-                                          ),
-                                          child: Text(e),
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
-                            ));
-                  },
-                  icon: Icon(Icons.more_vert),
-                ),
+                
               ],
             ),
           ),
@@ -219,7 +176,6 @@ class _PostCardState extends State<PostCard> {
                   Icons.comment_outlined,
                 ),
               ),
-              
             ],
           ),
 
@@ -296,4 +252,5 @@ class _PostCardState extends State<PostCard> {
       ),
     );
   }
+  else{return Container();}} 
 }

@@ -15,31 +15,35 @@ import '../providers/user_provider.dart';
 import '../resources/firestore_methods.dart';
 import '../screens/profile_screen.dart';
 
-class ProfilePostCard extends StatefulWidget {
+class PrivatePostCard extends StatefulWidget {
   final snap;
-  const ProfilePostCard({Key? key, required this.snap}) : super(key: key);
+  const PrivatePostCard({Key? key, required this.snap}) : super(key: key);
 
   @override
-  State<ProfilePostCard> createState() => _ProfilePostCardState();
+  State<PrivatePostCard> createState() => _PrivatePostCardState();
 }
 
-class _ProfilePostCardState extends State<ProfilePostCard> {
+class _PrivatePostCardState extends State<PrivatePostCard> {
   bool isLikeAnimating = false;
   int commentLen = 0;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     getComments();
   }
 
-  void getComments() async{
+  void getComments() async {
     try {
-      QuerySnapshot snap = await FirebaseFirestore.instance.collection('posts').doc(widget.snap['postId']).collection('comments').get();
-  
+      QuerySnapshot snap = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.snap['postId'])
+          .collection('comments')
+          .get();
+
       commentLen = snap.docs.length;
     } catch (e) {
-        showSnackBar(e.toString(), context);
+      showSnackBar(e.toString(), context);
     }
     setState(() {});
   }
@@ -47,6 +51,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
   @override
   Widget build(BuildContext context) {
     final model.User user = Provider.of<UserProvider>(context).getUser;
+    if(widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid){
     return Container(
       color: mobileBackgroundColor,
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -62,12 +67,12 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                 // Header Section
                 InkWell(
                   onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ProfileScreen(
-                              uid: widget.snap['uid'],
-                            ),
-                          ),
-                        ),
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(
+                        uid: widget.snap['uid'],
+                      ),
+                    ),
+                  ),
                   child: CircleAvatar(
                     radius: 16,
                     backgroundImage:
@@ -97,38 +102,52 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                   onPressed: () {
                     showDialog(
                         context: context,
-                        builder: (context) => Dialog(
-                              child: ListView(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                shrinkWrap: true,
-                                children: [
-                                  'Delete',
-                                ]
-                                    .map(
-                                      (e) => InkWell(
-                                        onTap: () async{
-                                          if (widget.snap['uid'] == FirebaseAuth.instance.currentUser!.uid) {
-  FirestoreMethods().deletePost(widget.snap['postId']);
-  Navigator.of(context).pop();
-  showSnackBar('Post Deleted', context);
-} else{
-  showSnackBar("Cannot delete others' posts", context);
-}
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 12,
-                                            horizontal: 16,
-                                          ),
-                                          child: Text(e),
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
+                        builder: (context) {
+                          return SimpleDialog(
+                            children: [
+                              SimpleDialogOption(
+                                  padding: const EdgeInsets.all(20),
+                                  child: const Text('Delete Post'),
+                                  onPressed: () async {
+                                    if (widget.snap['uid'] ==
+                                        FirebaseAuth
+                                            .instance.currentUser!.uid) {
+                                      FirestoreMethods()
+                                          .deletePost(widget.snap['postId']);
+                                      Navigator.of(context).pop();
+                                      showSnackBar('Post Deleted', context);
+                                    } else {
+                                      showSnackBar(
+                                          "Cannot delete others' posts",
+                                          context);
+                                    }
+                                  }),
+                              SimpleDialogOption(
+                                  padding: const EdgeInsets.all(20),
+                                  child: const Text('Change Post Privacy'),
+                                  onPressed: () async {
+                                    if (widget.snap['isPrivate'] == false) {
+                                      FirestoreMethods().setPostAsPrivate(
+                                          widget.snap['postId']);
+                                      Navigator.of(context).pop();
+                                      showSnackBar('Post set as Private', context);
+                                    } else {
+                                       FirestoreMethods().setPostAsPublic(
+                                          widget.snap['postId']);
+                                      Navigator.of(context).pop();
+                                      showSnackBar('Post set as Public', context);
+                                    }
+                                  }),
+                              SimpleDialogOption(
+                                padding: const EdgeInsets.all(20),
+                                child: const Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
                               ),
-                            ));
+                            ],
+                          );
+                        });
                   },
                   icon: Icon(Icons.more_vert),
                 ),
@@ -209,23 +228,6 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                   Icons.comment_outlined,
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.send,
-                ),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.bookmark_border,
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
 
@@ -301,5 +303,5 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
         ],
       ),
     );
-  }
+  }else{return Container();}} 
 }

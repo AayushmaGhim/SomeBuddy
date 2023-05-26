@@ -10,6 +10,7 @@ class Post {
   final String postUrl;
   final String profImage;
   final likes;
+  final bool isPrivate;
 
   const Post({
     required this.description,
@@ -20,6 +21,7 @@ class Post {
     required this.postUrl,
     required this.profImage,
     required this.likes,
+    required this.isPrivate,
   });
 
 
@@ -35,6 +37,7 @@ class Post {
       profImage: snapshot['profImage'],
       likes: snapshot['likes'],
       postUrl: snapshot['postUrl'],
+      isPrivate: snapshot['isPrivate'],
     );
   }
 
@@ -47,5 +50,6 @@ class Post {
     'profImage': profImage,
     "likes": likes,
     'postUrl': postUrl,
+    "isPrivate": isPrivate,
   };
 }

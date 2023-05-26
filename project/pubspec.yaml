@@ -30,6 +30,8 @@ environment:
 dependencies:
   cloud_firestore: ^4.6.0
   cupertino_icons: ^1.0.2
+  dcdg: ^4.1.0
+  ffi: ^2.0.2
   firebase_auth: ^4.5.0
   firebase_core: ^2.11.0
   firebase_storage: ^11.1.2
@@ -60,7 +62,7 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/ic_instagram.svg
+  #  - assets/ic_instagram.svg
     - assets/SomeBuddy.svg
     - assets/images/SomeBuddy.png
     - assets/images/SomeBuddy.jpeg

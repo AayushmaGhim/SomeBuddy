@@ -37,6 +37,7 @@ class FirestoreMethods {
         postUrl: photoUrl,
         profImage: profImage,
         likes: [],
+        isPrivate: false,
       );
 
       _firestore.collection('posts').doc(postId).set(
@@ -92,6 +93,24 @@ class FirestoreMethods {
     try{
       await _firestore.collection('posts').doc(postId).delete();
 
+    }
+    catch(e){
+      print(e.toString());
+    }
+  }
+
+  Future<void> setPostAsPrivate(String postId) async{
+    try{
+      await _firestore.collection('posts').doc(postId).update({'isPrivate': true});
+    }
+    catch(e){
+      print(e.toString());
+    }
+  }
+
+  Future<void> setPostAsPublic(String postId) async{
+    try{
+      await _firestore.collection('posts').doc(postId).update({'isPrivate': false});
     }
     catch(e){
       print(e.toString());

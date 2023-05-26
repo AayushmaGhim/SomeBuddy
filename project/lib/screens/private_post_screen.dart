@@ -1,38 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:project/anonymous/an_chat_home_screen.dart';
 import 'package:project/utils/colors.dart';
 import 'package:project/utils/utils.dart';
 import 'package:project/widgets/post_card.dart';
 
-class FeedScreen extends StatefulWidget {
-  const FeedScreen({super.key});
+import '../widgets/private_post_card.dart';
+
+class PrivatePostScreen extends StatefulWidget {
+  const PrivatePostScreen({super.key});
 
   @override
-  State<FeedScreen> createState() => _FeedScreenState();
+  State<PrivatePostScreen> createState() => _PrivatePostScreenState();
 }
 
-class _FeedScreenState extends State<FeedScreen> {
-  
-    int postLen = 0;
-    int postLen1 = 0;
-@override
+class _PrivatePostScreenState extends State<PrivatePostScreen> {
+  int postLen = 0;
+  @override
   void initState() {
     getData();
   }
 
-  getData() async{
-      var postSnap = await FirebaseFirestore.instance
-          .collection('posts')
-          .get();
-      var postSnap1 = await FirebaseFirestore.instance
-          .collection('posts').where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .get();
+  getData() async {
+    var postSnap = await FirebaseFirestore.instance
+        .collection('posts')
+        .get();
 
-      postLen = postSnap.docs.length;
-      postLen1 = postSnap1.docs.length;
+    postLen = postSnap.docs.length;
   }
 
   @override
@@ -40,20 +36,9 @@ class _FeedScreenState extends State<FeedScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
+        foregroundColor: primaryColor,
+        title: const Text('Your Posts'),
         centerTitle: false,
-        title: Image.asset('assets/images/SomeBuddy.png',
-          height: 50,
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {if(postLen1 > 0){Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const AnChatHomeScreen()));} else{return showSnackBar('Upload at least one post to send anonymous texts', context);}},
-            icon: const Icon(
-              Icons.messenger,
-              color: primaryColor,
-            ),
-          ),
-        ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -70,7 +55,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) => PostCard(
+            itemBuilder: (context, index) => PrivatePostCard(
               snap: snapshot.data!.docs[index].data(),
             ),
           );

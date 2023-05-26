@@ -8,7 +8,8 @@ import 'package:project/responsive/mobile_screen_layout.dart';
 import 'package:project/responsive/responsive_layout_screen.dart';
 import 'package:project/responsive/web_screen_layout.dart';
 import 'package:project/screens/login_screen.dart';
-import 'package:project/screens/signup_screen.dart';
+//import 'package:project/screens/signup_screen.dart';
+import 'package:dcdg/dcdg.dart';
 import 'package:provider/provider.dart' as prov;
 
 import 'utils/colors.dart';

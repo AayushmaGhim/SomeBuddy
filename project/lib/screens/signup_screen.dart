@@ -90,25 +90,23 @@ class _SignupScreenState extends State<SignupScreen> {
             Flexible(child: Container(), flex: 2),
 
             //svg image
-            SvgPicture.asset('assets/SomeBuddy.svg',
-                color: primaryColor, height: 64),
-            const SizedBox(height: 30 ),
+            Image.asset('assets/images/SomeBuddy.png', height: 50),
 
             //circular widhet to accept and show our selected files
             Stack(children: [
               _image != null
                   ? CircleAvatar(
-                      radius: 64,
+                      radius: 44,
                       backgroundImage: MemoryImage(_image!),
                     )
                   : const CircleAvatar(
-                      radius: 64,
+                      radius: 44,
                       backgroundImage: NetworkImage(
                           'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/626fd8140423801.6241b91e24d9c.png'),
                     ),
               Positioned(
                 bottom: -10,
-                left: 80,
+                left: 40,
                 child: IconButton(
                   onPressed: selectImage,
                   icon: const Icon(
@@ -180,6 +178,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     color: blueColor),
               ),
             ),
+
+            const Text('By signing up to this app, you agree to provide us your user information required to operate this application.'),
             const SizedBox(
               height: 12,
             ),
