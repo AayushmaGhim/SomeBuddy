@@ -30,7 +30,7 @@ class _EditProfileState extends State<EditProfile> {
   Uint8List? _image;
   var userData = {};
   bool _isLoading = false;
-  
+
   String? get uid => widget.uid;
 
   @override
@@ -152,139 +152,141 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     DocumentReference userRef = _firestore.collection('users').doc('uid');
 
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: mobileBackgroundColor,
-          foregroundColor: primaryColor,
-          title: const Text(
-            'Edit Your Profile',
-            style: TextStyle(color: primaryColor),
-          ),
-          centerTitle: false,
-        ),
-        body: SafeArea(
-            child: Container(
-          padding: MediaQuery.of(context).size.width > webScreenSize
-              ? EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width / 3)
-              : const EdgeInsets.symmetric(horizontal: 32),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(child: Container(), flex: 2),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: userData['username'],
-                      //text: 'username',
-                      style: const TextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+    return _isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : Scaffold(
+            appBar: AppBar(
+              backgroundColor: mobileBackgroundColor,
+              foregroundColor: primaryColor,
+              title: const Text(
+                'Edit Your Profile',
+                style: TextStyle(color: primaryColor),
               ),
-              const SizedBox(height: 24),
-
-              //image selector
-              Stack(children: [
-                _image != null
-                    ? CircleAvatar(
-                        radius: 64,
-                        backgroundImage: MemoryImage(_image!),
-                      )
-                    : CircleAvatar(
-                        radius: 64,
-                        backgroundImage: NetworkImage(userData['photoUrl']),
-                      ),
-                Positioned(
-                  bottom: -10,
-                  left: 80,
-                  child: IconButton(
-                    onPressed: selectImage,
-                    icon: const Icon(
-                      Icons.add_a_photo,
-                    ),
-                  ),
-                ),
-              ]),
-
-              const SizedBox(height: 24),
-
-              //username changer
-              TextFieldInput(
-                hintText: 'Enter new username',
-                textInputType: TextInputType.text,
-                textEditingController: _usernameController,
-              ),
-              const SizedBox(height: 24),
-
-              TextFieldInput(
-                hintText: 'Enter new bio',
-                textInputType: TextInputType.text,
-                textEditingController: _bioController,
-              ),
-              const SizedBox(height: 24),
-
-              InkWell(
-                onTap: editUser,
+              centerTitle: false,
+            ),
+            body: SafeArea(
                 child: Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                      ),
-                      color: blueColor),
-                  child: _isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: secondaryColor,
+              padding: MediaQuery.of(context).size.width > webScreenSize
+                  ? EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width / 3)
+                  : const EdgeInsets.symmetric(horizontal: 32),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(child: Container(), flex: 2),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: userData['username'],
+                          //text: 'username',
+                          style: const TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.bold,
                           ),
-                        )
-                      : const Text(
-                          'Make Changes',
-                          style: TextStyle(color: secondaryColor),
                         ),
-                ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(color: secondaryColor),
+                      ],
+                    ),
                   ),
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
+                  const SizedBox(height: 24),
+
+                  //image selector
+                  Stack(children: [
+                    _image != null
+                        ? CircleAvatar(
+                            radius: 64,
+                            backgroundImage: MemoryImage(_image!),
+                          )
+                        : CircleAvatar(
+                            radius: 64,
+                            backgroundImage: NetworkImage(userData['photoUrl']),
+                          ),
+                    Positioned(
+                      bottom: -10,
+                      left: 80,
+                      child: IconButton(
+                        onPressed: selectImage,
+                        icon: const Icon(
+                          Icons.add_a_photo,
                         ),
                       ),
-                      color: blueColor),
-                ),
+                    ),
+                  ]),
+
+                  const SizedBox(height: 24),
+
+                  //username changer
+                  TextFieldInput(
+                    hintText: 'Enter new username',
+                    textInputType: TextInputType.text,
+                    textEditingController: _usernameController,
+                  ),
+                  const SizedBox(height: 24),
+
+                  TextFieldInput(
+                    hintText: 'Enter new bio',
+                    textInputType: TextInputType.text,
+                    textEditingController: _bioController,
+                  ),
+                  const SizedBox(height: 24),
+
+                  InkWell(
+                    onTap: editUser,
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: const ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                          ),
+                          color: blueColor),
+                      child: _isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: secondaryColor,
+                              ),
+                            )
+                          : const Text(
+                              'Make Changes',
+                              style: TextStyle(color: secondaryColor),
+                            ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: secondaryColor),
+                      ),
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: const ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                          ),
+                          color: blueColor),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Flexible(child: Container(), flex: 2),
+                ],
               ),
-              const SizedBox(
-                height: 12,
-              ),
-              Flexible(child: Container(), flex: 2),
-            ],
-          ),
-        )));
+            )));
   }
 }

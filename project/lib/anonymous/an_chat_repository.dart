@@ -104,7 +104,7 @@ class AnChatRepository {
       await firestore
           .collection('users')
           .doc(recieverUserId)
-          .collection('chats')
+          .collection('anChats')
           .doc(auth.currentUser!.uid)
           .set(
             recieverChatContact.toJson(),
@@ -120,7 +120,7 @@ class AnChatRepository {
       await firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
-          .collection('chats')
+          .collection('anChats')
           .doc(recieverUserId)
           .set(
             senderChatContact.toJson(),
@@ -241,7 +241,7 @@ class AnChatRepository {
       await firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
-          .collection('chats')
+          .collection('anChats')
           .doc(recieverUserId)
           .collection('messages')
           .doc(messageId)
@@ -250,7 +250,7 @@ class AnChatRepository {
       await firestore
           .collection('users')
           .doc(recieverUserId)
-          .collection('chats')
+          .collection('anChats')
           .doc(auth.currentUser!.uid)
           .collection('messages')
           .doc(messageId)

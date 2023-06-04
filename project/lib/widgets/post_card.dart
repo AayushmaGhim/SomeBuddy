@@ -1,7 +1,7 @@
 //import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project/models/user.dart' as model;
@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 import '../resources/firestore_methods.dart';
 import '../screens/profile_screen.dart';
+import '../utils/global_variables.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -51,9 +52,16 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     final model.User user = Provider.of<UserProvider>(context).getUser;
+    final width = MediaQuery.of(context).size.width;
+    
     if(widget.snap['isPrivate'] == false){
     return Container(
-      color: mobileBackgroundColor,
+       decoration: BoxDecoration(
+        border: Border.all(
+          color: width > webScreenSize ? greyColor : mobileBackgroundColor,
+        ),
+        color: mobileBackgroundColor,
+      ),
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         children: [

@@ -141,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   const LoginScreen()));
-                                                                  Provider.of(context).clear();
+                                                                  //Provider.of(context).clear();
                                                 },
                                               ),
                                             ],

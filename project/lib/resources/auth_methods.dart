@@ -103,7 +103,7 @@ class AuthMethods {
           photoUrl: photoUrl,
           followers: [],
           following: [],
-          sentiment: '0',
+          sentiment: '2',
         );
 
         await _firestore.collection('users').doc(cred.user!.uid).set(

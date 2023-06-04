@@ -9,7 +9,7 @@ import 'package:project/responsive/responsive_layout_screen.dart';
 import 'package:project/responsive/web_screen_layout.dart';
 import 'package:project/screens/login_screen.dart';
 //import 'package:project/screens/signup_screen.dart';
-import 'package:dcdg/dcdg.dart';
+//import 'package:dcdg/dcdg.dart';
 import 'package:provider/provider.dart' as prov;
 
 import 'utils/colors.dart';
@@ -19,6 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     await Firebase.initializeApp(
+      // ignore: prefer_const_constructors
       options: FirebaseOptions(
         apiKey: 'AIzaSyC4JrtGHj4Bb3vo8O2xgwonRpGUBTM5fGU',
         appId: '1:1095120958767:web:af00b3536b558467b51dda',

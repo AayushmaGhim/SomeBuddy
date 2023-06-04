@@ -3,15 +3,11 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project/models/post.dart';
 import 'package:project/resources/storage_methods.dart';
-//import 'package:project/utils/utils.dart';
 import 'package:uuid/uuid.dart';
-
-
+import 'package:dart_sentiment/dart_sentiment.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-    
 
   // upload posts
   Future<String> uploadPost(
@@ -43,6 +39,8 @@ class FirestoreMethods {
       _firestore.collection('posts').doc(postId).set(
             post.toJson(),
           );
+
+      predictSentiment(description, uid);
       res = 'success';
     } catch (err) {
       res = err.toString();
@@ -68,65 +66,90 @@ class FirestoreMethods {
     }
   }
 
-  Future<void> postComment(String postId, String text, String uid, String name, String profilePic) async {
-    try{
-        if(text.isNotEmpty){
-          String commentId = const Uuid().v1();
-         await _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).set({
-            'profilePic': profilePic,
-            'name': name,
-            'uid': uid,
-            'text': text,
-            'commentId': commentId,
-            'datePublished': DateTime.now(),
-          });
-        } else{
-          print('Comment is empty');
-        }
-    } catch(e){
+  Future<void> postComment(String postId, String text, String uid, String name,
+      String profilePic) async {
+    try {
+      if (text.isNotEmpty) {
+        String commentId = const Uuid().v1();
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set({
+          'profilePic': profilePic,
+          'name': name,
+          'uid': uid,
+          'text': text,
+          'commentId': commentId,
+          'datePublished': DateTime.now(),
+        });
+      } else {
+        print('Comment is empty');
+      }
+    } catch (e) {
       print(e.toString());
     }
   }
 
   //delete post
-  Future<void> deletePost(String postId) async{
-    try{
+  Future<void> deletePost(String postId) async {
+    try {
       await _firestore.collection('posts').doc(postId).delete();
-
-    }
-    catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }
 
-  Future<void> setPostAsPrivate(String postId) async{
-    try{
-      await _firestore.collection('posts').doc(postId).update({'isPrivate': true});
-    }
-    catch(e){
+  Future<void> setPostAsPrivate(String postId) async {
+    try {
+      await _firestore
+          .collection('posts')
+          .doc(postId)
+          .update({'isPrivate': true});
+    } catch (e) {
       print(e.toString());
     }
   }
 
-  Future<void> setPostAsPublic(String postId) async{
-    try{
-      await _firestore.collection('posts').doc(postId).update({'isPrivate': false});
-    }
-    catch(e){
+  Future<void> setPostAsPublic(String postId) async {
+    try {
+      await _firestore
+          .collection('posts')
+          .doc(postId)
+          .update({'isPrivate': false});
+    } catch (e) {
       print(e.toString());
     }
   }
+
+  Future<void> predictSentiment(String description, String uid) async {
+      Sentiment sentiment = Sentiment();
+      final res = await sentiment.analysis(description);
+      //String result = res['score'].toString();
+       
+      if(res['score'] > 0){
+        await _firestore
+          .collection('users')
+          .doc(uid)
+          .update({'sentiment': '1'});
+      }
+      else{
+        await _firestore
+          .collection('users')
+          .doc(uid)
+          .update({'sentiment': '0'});
+      } 
+}
 
   //follow users
-  Future<void> followUser(
-    String uid,
-    String followId
-  ) async{
-    try{
-      DocumentSnapshot snap = await _firestore.collection('users').doc(uid).get();
+  Future<void> followUser(String uid, String followId) async {
+    try {
+      DocumentSnapshot snap =
+          await _firestore.collection('users').doc(uid).get();
       List following = (snap.data() as dynamic)['following'];
 
-      if(following.contains(followId)){
+      if (following.contains(followId)) {
         await _firestore.collection('users').doc(followId).update({
           'followers': FieldValue.arrayRemove([uid])
         });
@@ -134,7 +157,7 @@ class FirestoreMethods {
         await _firestore.collection('users').doc(followId).update({
           'following': FieldValue.arrayRemove([followId])
         });
-      } else{
+      } else {
         await _firestore.collection('users').doc(followId).update({
           'followers': FieldValue.arrayUnion([uid])
         });
@@ -143,7 +166,7 @@ class FirestoreMethods {
           'following': FieldValue.arrayUnion([followId])
         });
       }
-    } catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }

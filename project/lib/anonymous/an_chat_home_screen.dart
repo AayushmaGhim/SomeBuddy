@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:project/anonymous/an_chat_screen.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 // import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:project/chat/screen/chat_screen.dart';
+//import 'package:project/chat/screen/chat_screen.dart';
 import 'package:project/models/user.dart' as model;
 import 'package:provider/provider.dart';
 
